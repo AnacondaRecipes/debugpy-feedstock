@@ -31,4 +31,4 @@ del *.exp
 popd
 popd
 
-%PYTHON% -m pip install . -vv
+%PYTHON% -m pip install . --no-deps --no-build-isolation -vv

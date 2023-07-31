@@ -17,4 +17,4 @@ ${CXX} ${CXXFLAGS} ${EXTRA_FLAGS} -o ${SHARED_LIBRARY} attach.cpp
 mv ${SHARED_LIBRARY} ../
 popd
 popd
-${PYTHON} -m pip install . -vv
+${PYTHON} -m pip install . --no-deps --no-build-isolation -vv
