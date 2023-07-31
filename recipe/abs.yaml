@@ -1,6 +1,0 @@
-channels:
-  scrass_org: spyder-kernels-update
-build_parameters:
-  - "--suppress-variables"
-  - "--error-overlinking"
-  - "--error-overdepending"
