@@ -1,6 +1,2 @@
 channels:
-  - scrass_org: spyder-test
-build_parameters:
-  - "--suppress-variables"
-  - "--error-overlinking"
-  - "--error-overdepending"
+  scrass_org: spyder-test
