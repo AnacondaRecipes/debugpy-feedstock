@@ -1,8 +1,0 @@
-upload_channels:
-  - scrass_org
-channels:
-  - scrass_org
-build_parameters:
-  - "--suppress-variables"
-  - "--error-overlinking"
-  - "--error-overdepending"
