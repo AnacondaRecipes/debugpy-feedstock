@@ -13,15 +13,17 @@ build:
   number: 0
   entry_points:
     - debugpy = debugpy.server.cli:main
+    - debugpy-adapter = debugpy.adapter.__main__:main
   ignore_run_exports:
     - libcxx  # [osx]
 
 requirements:
   build:
     - python
-    - {{ compiler('c') }}           # [unix]
-    - {{ compiler('cxx') }}         # [unix]
-    - pkg-config                    # [linux]
+    - {{ stdlib('c') }}
+    - {{ compiler('c') }}
+    - {{ compiler('cxx') }}
+    - pkg-config
   host:
     - python
     - pip
@@ -31,16 +33,17 @@ requirements:
     - python
 
 test:
-  requires:
-    - pip
-  commands:
-    - pip check
   imports:
     - debugpy
     - debugpy.adapter
     - debugpy.common
     - debugpy.launcher
     - debugpy.server
+  requires:
+    - pip
+  commands:
+    - pip check
+    - python -c "from importlib.metadata import version; assert(version('{{ name }}')=='{{ version }}')"
 
 about:
   home: https://github.com/Microsoft/debugpy
