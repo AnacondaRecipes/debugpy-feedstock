@@ -14,8 +14,6 @@ build:
   entry_points:
     - debugpy = debugpy.server.cli:main
     - debugpy-adapter = debugpy.adapter.__main__:main
-  ignore_run_exports:
-    - libcxx  # [osx]
 
 requirements:
   build:
