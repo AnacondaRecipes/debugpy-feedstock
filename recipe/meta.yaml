@@ -6,8 +6,12 @@ package:
   version: {{ version }}
 
 source:
-  url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: 31e69a1feb1cf6b51efbed3f6c9b0ef03bc46ff050679c4be7ea6d2e23540870
+  - url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+    sha256: 31e69a1feb1cf6b51efbed3f6c9b0ef03bc46ff050679c4be7ea6d2e23540870
+
+  - url: https://github.com/microsoft/{{ name }}/archive/refs/tags/v{{ version }}.tar.gz
+    sha256: cce9b8aeed25f8ba33df464283112a87a7881e5d3b5dc3c9f30dc9852ec123db
+    folder: gh_src
 
 build:
   number: 0
@@ -30,7 +34,16 @@ requirements:
   run:
     - python
 
+{% set SKIP_TEST_FILES = [
+    "gh_src/tests/debugpy/test_flask.py",
+    "gh_src/tests/debugpy/test_django.py",
+    "gh_src/tests/debugpy/test_gevent.py",
+    "gh_src/tests/debugpy/test_numpy.py"
+] %}
+
 test:
+  source_files:
+    - gh_src/tests
   imports:
     - debugpy
     - debugpy.adapter
@@ -39,9 +52,15 @@ test:
     - debugpy.server
   requires:
     - pip
+    - pytest
+    - pytest-xdist
+    - pytest-timeout
+    - psutil
+    - requests
   commands:
     - pip check
     - python -c "from importlib.metadata import version; assert(version('{{ name }}')=='{{ version }}')"
+    - python -m pytest -n auto --dist=loadfile --timeout=180 --timeout-method=thread --durations=25 -o pythonpath=gh_src gh_src/tests/debugpy -v {% for file in SKIP_TEST_FILES %} --ignore={{ file }}{% endfor %}
 
 about:
   home: https://github.com/Microsoft/debugpy
