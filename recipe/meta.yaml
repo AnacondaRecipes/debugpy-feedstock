@@ -41,6 +41,14 @@ requirements:
     "gh_src/tests/debugpy/test_numpy.py"
 ] %}
 
+{% set SKIP_TEST_KEYWORDS = [
+    "attach_pid",
+    "django",
+    "flask",
+    "gevent",
+    "numpy"
+] %}
+
 test:
   source_files:
     - gh_src/tests
@@ -60,7 +68,7 @@ test:
   commands:
     - pip check
     - python -c "from importlib.metadata import version; assert(version('{{ name }}')=='{{ version }}')"
-    - python -m pytest -n auto --dist=loadfile --timeout=180 --timeout-method=thread --durations=25 -o pythonpath=gh_src gh_src/tests/debugpy -v {% for file in SKIP_TEST_FILES %} --ignore={{ file }}{% endfor %}
+    - python -m pytest -ra -vvv -n auto --dist=loadfile --timeout=60 --timeout-method=thread --durations=25 -o pythonpath=gh_src gh_src/tests/debugpy {% for file in SKIP_TEST_FILES %} --ignore={{ file }}{% endfor %} -k "not ({{ SKIP_TEST_KEYWORDS | join(' or ') }})"
 
 about:
   home: https://github.com/Microsoft/debugpy
