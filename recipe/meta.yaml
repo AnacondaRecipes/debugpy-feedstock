@@ -41,13 +41,23 @@ requirements:
     "gh_src/tests/debugpy/test_numpy.py"
 ] %}
 
-{% set SKIP_TEST_KEYWORDS = [
+{% set SKIP_TEST_COMMON = [
     "attach_pid",
     "django",
     "flask",
     "gevent",
     "numpy"
 ] %}
+
+# FileNotFoundError: [Errno 2] No such file or directory:
+# 'C:\\miniconda3\\conda-bld\\debugpy_1757036819533\\test_tmp\\gh_src\\tests\\test_data\\bp\\ನನ್ನ_ಸ್ಕ್ರಿಪ್ಟ್.py'
+{% set SKIP_TEST_WIN = [
+    "test_path_with_unicode"
+] %}
+
+{% set SKIP_TEST_LIST = [] %}
+{% set SKIP_TEST_LIST = SKIP_TEST_LIST + SKIP_TEST_COMMON %}
+{% set SKIP_TEST_LIST = SKIP_TEST_LIST + SKIP_TEST_WIN %}  # [win]
 
 test:
   source_files:
@@ -68,7 +78,7 @@ test:
   commands:
     - pip check
     - python -c "from importlib.metadata import version; assert(version('{{ name }}')=='{{ version }}')"
-    - python -m pytest -ra -vvv -n auto --dist=loadfile --timeout=60 --timeout-method=thread --durations=25 -o pythonpath=gh_src gh_src/tests/debugpy {% for file in SKIP_TEST_FILES %} --ignore={{ file }}{% endfor %} -k "not ({{ SKIP_TEST_KEYWORDS | join(' or ') }})"
+    - python -m pytest -ra -vvv -n auto --dist=loadfile --timeout=60 --timeout-method=thread --durations=25 -o pythonpath=gh_src gh_src/tests/debugpy {% for file in SKIP_TEST_FILES %} --ignore={{ file }}{% endfor %} -k "not ({{ SKIP_TEST_LIST | join(' or ') }})"
 
 about:
   home: https://github.com/Microsoft/debugpy
