@@ -14,7 +14,7 @@ source:
     folder: gh_src
 
 build:
-  number: 0
+  number: 1
   entry_points:
     - debugpy = debugpy.server.cli:main
     - debugpy-adapter = debugpy.adapter.__main__:main
