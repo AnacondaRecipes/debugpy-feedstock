@@ -1,20 +1,42 @@
 {% set name = "debugpy" %}
-{% set version = "1.8.16" %}
+{% set version = "1.8.21" %}
+{% set SKIP_TEST_FILES = [
+  "gh_src/tests/debugpy/test_flask.py",
+  "gh_src/tests/debugpy/test_django.py",
+  "gh_src/tests/debugpy/test_gevent.py",
+  "gh_src/tests/debugpy/test_numpy.py"
+] %}
+{% set SKIP_TEST_COMMON = [
+  "attach_pid",
+  "django",
+  "flask",
+  "gevent",
+  "numpy"
+] %}
+{% set SKIP_TEST_WIN = [
+  "test_path_with_unicode"
+] %}
+{% set SKIP_TEST_LIST = [
+  
+] %}
+{% set SKIP_TEST_LIST = SKIP_TEST_LIST + SKIP_TEST_COMMON %}
+{% set SKIP_TEST_LIST = SKIP_TEST_LIST + SKIP_TEST_WIN %}  # [win]
 
+# FileNotFoundError: [Errno 2] No such file or directory:
+# 'C:\\miniconda3\\conda-bld\\debugpy_1757036819533\\test_tmp\\gh_src\\tests\\test_data\\bp\\ನನ್ನ_ಸ್ಕ್ರಿಪ್ಟ್.py'
 package:
   name: {{ name|lower }}
   version: {{ version }}
 
 source:
   - url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-    sha256: 31e69a1feb1cf6b51efbed3f6c9b0ef03bc46ff050679c4be7ea6d2e23540870
-
+    sha256: a3c53278e84c94e11bd87c53970ec391d1a67396c8b22609fcac576520e611a6
   - url: https://github.com/microsoft/{{ name }}/archive/refs/tags/v{{ version }}.tar.gz
-    sha256: cce9b8aeed25f8ba33df464283112a87a7881e5d3b5dc3c9f30dc9852ec123db
+    sha256: 5f1699a85d124efded8b64b6ecff6060e1d53bf652436061e59b8a2201e15c6c
     folder: gh_src
 
 build:
-  number: 1
+  number: 0
   entry_points:
     - debugpy = debugpy.server.cli:main
     - debugpy-adapter = debugpy.adapter.__main__:main
@@ -33,31 +55,6 @@ requirements:
     - wheel
   run:
     - python
-
-{% set SKIP_TEST_FILES = [
-    "gh_src/tests/debugpy/test_flask.py",
-    "gh_src/tests/debugpy/test_django.py",
-    "gh_src/tests/debugpy/test_gevent.py",
-    "gh_src/tests/debugpy/test_numpy.py"
-] %}
-
-{% set SKIP_TEST_COMMON = [
-    "attach_pid",
-    "django",
-    "flask",
-    "gevent",
-    "numpy"
-] %}
-
-# FileNotFoundError: [Errno 2] No such file or directory:
-# 'C:\\miniconda3\\conda-bld\\debugpy_1757036819533\\test_tmp\\gh_src\\tests\\test_data\\bp\\ನನ್ನ_ಸ್ಕ್ರಿಪ್ಟ್.py'
-{% set SKIP_TEST_WIN = [
-    "test_path_with_unicode"
-] %}
-
-{% set SKIP_TEST_LIST = [] %}
-{% set SKIP_TEST_LIST = SKIP_TEST_LIST + SKIP_TEST_COMMON %}
-{% set SKIP_TEST_LIST = SKIP_TEST_LIST + SKIP_TEST_WIN %}  # [win]
 
 test:
   source_files:
