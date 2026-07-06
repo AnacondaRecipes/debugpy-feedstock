@@ -1,23 +1,24 @@
 {% set name = "debugpy" %}
-{% set version = "1.8.16" %}
+{% set version = "1.8.21" %}
 
 package:
-  name: {{ name|lower }}
+  name: {{ name }}
   version: {{ version }}
 
 source:
   - url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-    sha256: 31e69a1feb1cf6b51efbed3f6c9b0ef03bc46ff050679c4be7ea6d2e23540870
+    sha256: a3c53278e84c94e11bd87c53970ec391d1a67396c8b22609fcac576520e611a6
 
   - url: https://github.com/microsoft/{{ name }}/archive/refs/tags/v{{ version }}.tar.gz
-    sha256: cce9b8aeed25f8ba33df464283112a87a7881e5d3b5dc3c9f30dc9852ec123db
+    sha256: 5f1699a85d124efded8b64b6ecff6060e1d53bf652436061e59b8a2201e15c6c
     folder: gh_src
 
 build:
-  number: 1
+  number: 0
   entry_points:
     - debugpy = debugpy.server.cli:main
     - debugpy-adapter = debugpy.adapter.__main__:main
+  skip: true # [py<38]
 
 requirements:
   build:
